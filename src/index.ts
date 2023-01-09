@@ -1,27 +1,8 @@
-import { Client, LocalAuth } from "whatsapp-web.js";
-import qrcode from 'qrcode-terminal';
+import { generateOrderMessage, showHelp } from "@/controllers";
+import { whatsapp } from '@/config';
 
-//* TEST :D
-
-const client = new Client({
-  authStrategy: new LocalAuth(),
-  puppeteer: {
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
-  }
+//* Callbacks
+whatsapp.client.on('message', (message) => {
+	if (message.body.startsWith('@comprar')) generateOrderMessage(message);
+	else if (message.body.startsWith('@ayuda')) showHelp(message);
 });
-
-client.on('qr', (qr) => {
-  qrcode.generate(qr, { small: true });
-});
-
-client.on('ready', () => {
-  console.log('Client is ready!');
-});
-
-client.on('message', (message) => {
-	console.log(message.body);
-  client.sendMessage(message.from, message.body);
-});
-
-client.initialize();
