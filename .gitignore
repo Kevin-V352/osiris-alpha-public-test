@@ -1,6 +1,9 @@
 # dependencies
 /node_modules
 
+# local env files
+.env
+
 # production
 /build
 /.wwebjs_auth
